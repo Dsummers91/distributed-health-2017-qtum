@@ -48,16 +48,18 @@ func main() {
 	fmt.Scanln()
 }
 
-func DeployContract(isSponser bool, _sponsors []string, _individuals []string, _milestoneNames []string, _milestonePayoutDays []uint, _milestonePayoutPercentages []uint, _milestoneSteps []uint) {
+func DeployContract() []byte {
 	entity := getEntity(1)
-	out, err := exec.Command("qtum-cli", "--regtest", entity.datadir, entity.rpcPort, "createcontract", bin, 40000).Output()
+	fmt.Printf("%s %s %s %s %s %s %s", "qtum-cli", "--regtest", entity.datadir, entity.rpcPort, "createcontract", bin, "50000")
+	out, err := exec.Command("qtum-cli", "--regtest", entity.datadir, entity.rpcPort, "createcontract", bin, "50000").Output()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	outAsString := string(out)
 	text := strings.Replace(outAsString, "\n", "", -1)
 	text = strings.Replace(text, " ", "", -1)
-	return
+	fmt.Println(text)
+	return []byte(text)
 }
 
 func (entity *Entity) getHexAddress() {

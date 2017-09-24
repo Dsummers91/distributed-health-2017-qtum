@@ -13,8 +13,8 @@ type DeployContractRequest struct {
 }
 
 type GetContractInfoResponse struct {
-	
 }
+
 func startAPI() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/createContract", deployContractAPI).Methods("GET")
@@ -45,7 +45,8 @@ func getContractInfo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 
-	var 
+	w.Write(DeployContract())
+
 }
 
 func joinContract(w http.ResponseWriter, r *http.Request) {
