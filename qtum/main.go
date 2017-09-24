@@ -13,7 +13,7 @@ type Response struct {
 
 func main() {
 	var response Response
-	out, err := exec.Command("qtum-cli", "getnetworkinfo").Output()
+	out, err := exec.Command("qtum-cli", "regtest", "getnetworkinfo").Output()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
