@@ -6,10 +6,23 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type DeployContractRequest struct {
+	isSponsor   bool
+	Sponsors    []string
+	Individuals []string
+}
+
+type GetContractInfoResponse struct {
+	
+}
 func startAPI() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/test", TestFunc).Methods("GET")
-	router.HandleFunc("/createContract", DeployContractAPI).Methods("GET")
+	router.HandleFunc("/createContract", deployContractAPI).Methods("GET")
+	router.HandleFunc("/contractInfo", getContractInfo).Methods("GET")
+	router.HandleFunc("/joinContract", joinContract).Methods("GET")
+	router.HandleFunc("/participateContract", participateContract).Methods("GET")
+	router.HandleFunc("/finishContract", finishContract).Methods("GET")
+	router.HandleFunc("/refundContract", refundContract).Methods("GET")
 	go http.ListenAndServe(":8888", router)
 }
 
@@ -21,8 +34,36 @@ func TestFunc(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("just works fam"))
 }
 
-func DeployContractAPI(w http.ResponseWriter, r *http.Request) {
+func deployContractAPI(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
-	// DeployContract()
+
+	w.Write([]byte("{success: true}"))
+}
+
+func getContractInfo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+
+	var 
+}
+
+func joinContract(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+}
+
+func participateContract(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+}
+
+func finishContract(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+}
+
+func refundContract(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
 }

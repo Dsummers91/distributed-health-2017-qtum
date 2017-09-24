@@ -1,7 +1,6 @@
 pragma solidity ^0.4.11;
 
-
-contract Collective {
+contract TheCollective {
 
 	struct Milestone {
 		bytes32 name;
@@ -12,7 +11,6 @@ contract Collective {
 		bool paidOut;
 	}
 
-	CollectiveFactory factory;
 	address[] public sponsors;
 	address[] public individuals;
 	address public initializer;
@@ -21,15 +19,15 @@ contract Collective {
 	uint public startDate;
 	uint public endDate;
 
-	function Collective(bool _isSponsor, address[] _sponsors, address[] _individuals, bytes32[] _milestoneNames, uint[] _milestonePayoutDays, uint[] _milestonePayoutPercentages, uint[] _milestoneSteps) {
+	function TheCollective(bool _isSponsor, address[] _sponsors, address[] _individuals) {
 		
 		startDate = now;
 
 		if (_isSponsor) {
-			sponsors.push(tx.origin);
+			sponsors.push(msg.sender);
 		}
 		else {
-			individuals.push(tx.origin);
+			individuals.push(msg.sender);
 		}
 
 		for (uint i = 0; i < _sponsors.length; ++i) {
@@ -40,13 +38,11 @@ contract Collective {
 			individuals.push(_individuals[j]);
 		}
 
-		for (uint k = 0; k < _milestoneNames.length; ++k) {
-			createMilestone(_milestoneNames[k], _milestonePayoutDays[k], _milestonePayoutPercentages[k], _milestoneSteps[k]);
-		}
+		initializer = msg.sender;
+	}
 
-		initializer = tx.origin;
-
-		factory = CollectiveFactory(msg.sender);
+	function getInitializer() constant returns (address) {
+		return initializer;
 	}
 
 	function daysSinceInception() constant returns (uint) {
