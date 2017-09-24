@@ -1,5 +1,3 @@
-// Credit To D. Mangrum for the Smart Contract Code!
-
 pragma solidity ^0.4.11;
 
 
@@ -96,15 +94,6 @@ contract Collective {
 
 	function fund() payable returns (bool) {
 		return true;
-	}
-
-}
-
-
-contract  CollectiveFactory {
-
-	function createCollective(bool _isSponsor, address[] _sponsors, address[] _individuals, bytes32[] _milestoneNames, uint[] _milestonePayoutDays, uint[] _milestonePayoutPercentages, uint[] _milestoneSteps) returns (Collective collectiveAddr) {
-		return new Collective(_isSponsor,_sponsors,_individuals,_milestoneNames,_milestonePayoutDays,_milestonePayoutPercentages,_milestoneSteps);
 	}
 
 }

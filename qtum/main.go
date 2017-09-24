@@ -24,4 +24,6 @@ func main() {
 	fmt.Println(text)
 	_ = json.Unmarshal([]byte(text), &response)
 	fmt.Println(response.Version)
+	startAPI()
+	fmt.Scanln()
 }
