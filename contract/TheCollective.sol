@@ -6,7 +6,7 @@ contract TheCollective {
 		bytes32 name;
 		uint start;
 		uint daysToPayout;
-		uint percentPayout;
+		uint payoutVal;
 		uint steps;
 		bool paidOut;
 	}
@@ -19,9 +19,32 @@ contract TheCollective {
 	uint public startDate;
 	uint public endDate;
 
-	function TheCollective(bool _isSponsor, address[] _sponsors, address[] _individuals) {
+	function TheCollective() {
 		
 		startDate = now;
+		// endDate = now + (duration * 1 days);
+
+		// if (_isSponsor) {
+		// 	sponsors.push(msg.sender);
+		// }
+		// else {
+		// 	individuals.push(msg.sender);
+		// }
+
+		// for (uint i = 0; i < _sponsors.length; ++i) {
+		// 	sponsors.push(_sponsors[i]);
+		// }
+
+		// for (uint j = 0; j < _individuals.length; ++j) {
+		// 	individuals.push(_individuals[j]);
+		// }
+
+		initializer = msg.sender;
+	}
+
+	function generate(bool _isSponsor, uint duration) {
+
+		endDate = now + (duration * 1 days);
 
 		if (_isSponsor) {
 			sponsors.push(msg.sender);
@@ -30,19 +53,29 @@ contract TheCollective {
 			individuals.push(msg.sender);
 		}
 
-		for (uint i = 0; i < _sponsors.length; ++i) {
-			sponsors.push(_sponsors[i]);
-		}
+		// for (uint i = 0; i < _sponsors.length; ++i) {
+		// 	sponsors.push(_sponsors[i]);
+		// }
 
-		for (uint j = 0; j < _individuals.length; ++j) {
-			individuals.push(_individuals[j]);
-		}
-
-		initializer = msg.sender;
+		// for (uint j = 0; j < _individuals.length; ++j) {
+		// 	individuals.push(_individuals[j]);
+		// }
 	}
 
 	function getInitializer() constant returns (address) {
 		return initializer;
+	}
+
+	function getSponsors() constant returns (address[]) {
+		return sponsors;
+	}
+
+	function getIndividuals() constant returns (address[]) {
+		return individuals;
+	}
+
+	function getTotalMilestoneNum() constant returns (uint) {
+		return milestones.length;
 	}
 
 	function daysSinceInception() constant returns (uint) {
@@ -50,17 +83,41 @@ contract TheCollective {
 		return numDays;
 	}
 
-	function createMilestone(bytes32 _name, uint _daysToPayout, uint _percentPayout, uint _steps) {
-		milestones.push(Milestone(_name, startDate, _daysToPayout, _percentPayout, _steps, false));
+	function isComplete() constant returns (bool) {
+		uint curDate = (daysSinceInception() * 1 days) + now;
+
+		if (endDate < curDate) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	function joinCollective(bool _isSponsor) {
+		if (_isSponsor) {
+			sponsors.push(msg.sender);
+		}
+		else {
+			individuals.push(msg.sender);
+		}
+	}
+
+	function createMilestone(bytes32 _name, uint _daysToPayout, uint _payoutVal, uint _steps) {
+		milestones.push(Milestone(_name, startDate, _daysToPayout, _payoutVal, _steps, false));
 	}
 
 	function payoutMilestone(uint _steps) {
 		uint numDays = daysSinceInception();
 		uint milestoneNum = getNextMilestoneNum();
 
-		if (_steps >= milestones[milestoneNum].steps && (milestones[milestoneNum].daysToPayout - numDays) > 0) {
+		if (_steps >= milestones[milestoneNum].steps && (milestones[milestoneNum].daysToPayout - numDays) > 0 && milestones[milestoneNum].paidOut == false) {
+
+			milestones[milestoneNum].paidOut = true;
+
 			for (uint i = 0; i < individuals.length; ++i) {
-				individuals[i].transfer(((milestones[i].percentPayout / 100) * this.balance) / individuals.length);
+				// individuals[i].transfer(((milestones[i].percentPayout / 100) * this.balance) / individuals.length);
+				individuals[i].transfer(milestones[milestoneNum].payoutVal / individuals.length);
 			}
 		}
 	}
@@ -79,11 +136,11 @@ contract TheCollective {
 		uint numDays = daysSinceInception();
 
 		for (uint i = 0; i < milestones.length; ++i) {
-			if (i == milestones.length - 1) {
+			if (milestones[i].daysToPayout > numDays && milestones[i].paidOut == false) {
 				return i;
 			}
-			else if (milestones[i].daysToPayout < numDays && milestones[i+1].daysToPayout > numDays) {
-				return i+1;
+			else if (i == milestones.length - 1) {
+				return i;
 			}
 		}
 	}

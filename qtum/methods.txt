@@ -1,17 +1,17 @@
 #node 1
-./qtumd -daemon -regtest -datadir=/home/deon/.qtum1 -port=1234 -rpcport=2234
+qtumd -daemon -regtest -datadir=/home/deon/.qtum1 -port=1234 -rpcport=2234 -staker-max-tx-gas-limit=500000 -blockmaxsize=3800000 -blockmaxweight=15200000
 ./qtum-cli -regtest -datadir=/home/deon/.qtum1 -rpcport=2234 getinfo
 
 #node 2
-./qtumd -daemon -regtest -datadir=/home/deon/.qtum2 -port=1235 -rpcport=2235 -addnode=127.0.0.1:1234
+qtumd -daemon -regtest -datadir=/home/deon/.qtum2 -port=1235 -rpcport=2235 -addnode=127.0.0.1:1234 -staker-max-tx-gas-limit=500000 -blockmaxsize=3800000 -blockmaxweight=15200000
 ./qtum-cli -regtest -datadir=/home/deon/.qtum2 -rpcport=2235 getinfo
 
 #node 3
-./qtumd -daemon -regtest -datadir=/home/deon/.qtum3 -port=1236 -rpcport=2236 -addnode=127.0.0.1:1234
+qtumd -daemon -regtest -datadir=/home/deon/.qtum3 -port=1236 -rpcport=2236 -addnode=127.0.0.1:1234 -staker-max-tx-gas-limit=500000  -blockmaxsize=3800000 -blockmaxweight=15200000
 ./qtum-cli -regtest -datadir=/home/deon/.qtum3 -rpcport=2236 getinfo
 
 #node 4
-./qtumd -daemon -regtest -datadir=/home/deon/.qtum4 -port=1237 -rpcport=2237 -addnode=127.0.0.1:1234
+qtumd -daemon -regtest -datadir=/home/deon/.qtum4 -port=1237 -rpcport=2237 -addnode=127.0.0.1:1234 -staker-max-tx-gas-limit=500000  -blockmaxsize=3800000 -blockmaxweight=15200000
 ./qtum-cli -regtest -datadir=/home/deon/.qtum4 -rpcport=2237 getinfo
 
 #Get QTUM TO EACH NODE
@@ -19,4 +19,6 @@
 ./qtum-cli -regtest -datadir=/home/deon/.qtum2 -rpcport=2235 generate 500
 ./qtum-cli -regtest -datadir=/home/deon/.qtum3 -rpcport=2236 generate 500
 ./qtum-cli -regtest -datadir=/home/deon/.qtum4 -rpcport=2237 generate 500
+
+
 
